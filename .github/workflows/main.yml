@@ -1,0 +1,72 @@
+name: Electric Bees Stock Notifications
+
+on:
+  schedule:
+    # Runs every 5 minutes from 6 PM to midnight AEDT
+    - cron: '0,5,10,15,20,25,30,35,40,45,50,55 6-14 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-stock:
+    runs-on: ubuntu-latest
+    # Limit total job runtime to 5 minutes
+    timeout-minutes: 5
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    
+    - name: Install dependencies
+      run: |
+        npm install
+    
+    - name: Check Stock Availability
+      id: stock-check
+      env:
+        STOCK_AVAILABILITY_URLS: ${{ secrets.STOCK_AVAILABILITY_URLS }}
+        PREFERRED_STORE_IDS: ${{ secrets.PREFERRED_STORE_IDS }}
+        UPDATE_HASH: ${{ secrets.UPDATE_HASH }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        node index.js
+      continue-on-error: true
+      
+    - name: Read Results
+      id: read-results
+      if: ${{ steps.stock-check.outcome == 'success' }}
+      run: |
+        result=$(cat results.json)
+        echo "result=${result}" >> $GITHUB_OUTPUT
+
+    - name: Send Mail
+      # Only send email if previous step found new stock
+      if: ${{ steps.read-results.outputs.result != '' }}
+      uses: dawidd6/action-send-mail@v4
+      with:
+        server_address: smtp.gmail.com
+        server_port: 465
+        secure: true
+        username: ${{secrets.MAIL_USERNAME}}
+        password: ${{secrets.MAIL_PASSWORD}}
+        subject: New Electric Bees Stock Available
+        to: ${{secrets.NOTIFICATION_EMAIL}}
+        from: GitHub Actions <${{secrets.MAIL_USERNAME}}>
+        body: |
+          New stock availability detected:
+
+          ${{ fromJson(steps.read-results.outputs.result) }}
+        
+        # Optional priority
+        priority: high
+
+# Optimization to reduce GitHub Actions resources
+env:
+  # Reduce verbosity of npm logs
+  NODE_OPTIONS: '--no-warnings'
+  # Disable colored output to reduce log size
+  NO_COLOR: '1'
