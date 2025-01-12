@@ -9,12 +9,14 @@ puppeteer.use(StealthPlugin());
 const STOCK_AVAILABILITY_URLS = process.env.STOCK_AVAILABILITY_URLS?.split(',') || [];
 const PREFERRED_STORE_IDS = process.env.PREFERRED_STORE_IDS?.split(',').map(Number) || [];
 const UPDATE_HASH = process.env.UPDATE_HASH || '';
+const GH_TOKEN = process.env.GH_TOKEN || '';
+const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY || '';
 
 class StockAvailabilityFinder {
     constructor() {
-        this.octokit = new Octokit({ auth: process.env.GH_TOKEN });
-        this.owner = process.env.GITHUB_REPOSITORY.split('/')[0];
-        this.repo = process.env.GITHUB_REPOSITORY.split('/')[1];
+        this.octokit = new Octokit({ auth: GH_TOKEN });
+        this.owner = GITHUB_REPOSITORY.split('/')[0];
+        this.repo = GITHUB_REPOSITORY.split('/')[1];
     }
 
     async updateHashSecret(hash) {
@@ -58,7 +60,7 @@ class StockAvailabilityFinder {
             }));
 
             let i = 0;
-            const someHaveStock = false;
+            let someHaveStock = false;
             
             for (const url of STOCK_AVAILABILITY_URLS) {
                 try {
@@ -69,8 +71,6 @@ class StockAvailabilityFinder {
                     
                     // Get the page source
                     const pageContent = await response.text();
-
-                    // console.log(pageContent);
 
                     const itemNameElement = await page.$('.store-product-title');
                     if (itemNameElement) {
