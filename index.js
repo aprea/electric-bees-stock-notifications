@@ -118,9 +118,19 @@ class StockAvailabilityFinder {
                 process.exit(78);
             }
 
+            // Build plaintext email with stock data
+            let emailBody = '';
+            for (const stock of stockData) {
+                emailBody += `${stock.productTitle}\n`;
+                for (const store of stock.storeData) {
+                    emailBody += `- ${store.name}: ${store.itemInStock ? 'In stock' : 'Out of stock'}\n`;
+                }
+                emailBody += '\n\n---\n\n';
+            }
+
             await this.updateHashSecret(hash);
 
-            return stockData;
+            return emailBody;
         } finally {
             if (browser) {
                 await browser.close();
@@ -134,7 +144,7 @@ const stockAvailabilityFinderInstance = new StockAvailabilityFinder();
 stockAvailabilityFinderInstance.findAndNotifyStockAvailability()
     .then((result) => {
         // Write result to a file for GitHub Actions to read
-        writeFileSync('results.json', JSON.stringify(result));
+        writeFileSync('results.txt', JSON.stringify(result));
         process.exit(0);
     })
     .catch((error) => {
