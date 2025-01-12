@@ -41,7 +41,7 @@ jobs:
       id: read-results
       if: ${{ steps.stock-check.outcome == 'success' }}
       run: |
-        result=$(cat results.json)
+        result=$(cat results.txt)
         echo "result=${result}" >> $GITHUB_OUTPUT
 
     - name: Send Mail
