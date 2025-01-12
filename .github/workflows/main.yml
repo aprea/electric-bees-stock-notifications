@@ -2,8 +2,10 @@ name: Electric Bees Stock Notifications
 
 on:
   schedule:
-    # Runs every 5 minutes from 6 PM to midnight AEDT
-    - cron: '0,5,10,15,20,25,30,35,40,45,50,55 6-14 * * *'
+    # Runs every 15 minutes from 8 AM to 11 AM AEDT
+    - cron: '0,15,30,45 21-23 * * *'
+    # Runs every 15 minutes from 11 AM to 9 PM AEDT
+    - cron: '0,15,30,45 0-9 * * *'
   workflow_dispatch:
 
 jobs:
