@@ -9,6 +9,7 @@ on:
 jobs:
   check-stock:
     runs-on: ubuntu-latest
+    permissions: write-all
     # Limit total job runtime to 5 minutes
     timeout-minutes: 5
     
