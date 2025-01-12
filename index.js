@@ -122,12 +122,12 @@ class StockAvailabilityFinder {
             let emailBody = '';
             let j = 0;
             for (const stock of stockData) {
-                emailBody += `${stock.productTitle}\n`;
+                emailBody += `${stock.productTitle}<br>`;
                 for (const store of stock.storeData) {
-                    emailBody += `- ${store.name}: ${store.itemInStock ? 'In stock' : 'Out of stock'}\n`;
+                    emailBody += `- ${store.name}: ${store.itemInStock ? 'In stock' : 'Out of stock'}<br>`;
                 }
                 if (j < stockData.length - 1) {
-                    emailBody += '\n---\n\n';
+                    emailBody += '<br>---<br><br>';
                 }
                 ++j;
             }
