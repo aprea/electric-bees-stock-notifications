@@ -58,7 +58,7 @@ jobs:
         to: ${{secrets.NOTIFICATION_EMAIL}}
         from: GitHub Actions <${{secrets.MAIL_USERNAME}}>
         html_body: |
-          New stock availability detected:
+          New stock availability detected:<br><br>---<br><br>
 
           ${{ fromJson(steps.read-results.outputs.result).emailBody }}
         
