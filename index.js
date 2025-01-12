@@ -21,7 +21,7 @@ class StockAvailabilityFinder {
 
     async updateHashSecret(hash) {
         try {
-            await this.octokit.actions.createRepoVariable({
+            await this.octokit.actions.updateRepoVariable({
               owner: this.owner,
               repo: this.repo,
               name: 'UPDATE_HASH',
