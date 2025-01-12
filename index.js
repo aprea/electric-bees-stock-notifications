@@ -109,13 +109,17 @@ class StockAvailabilityFinder {
             }
 
             if (!someHaveStock) {
-                process.exit(78);
+                process.exitCode = 78;
+                console.log('No stock found');
+                return { emailBody: '' };
             }
             
             const hash = createHash('sha256').update(JSON.stringify(stockData)).digest('hex');
 
             if (UPDATE_HASH === hash) {
-                process.exit(78);
+                process.exitCode = 78;
+                console.log('No stock change');
+                return { emailBody: '' };
             }
 
             // Build plaintext email with stock data
@@ -147,11 +151,15 @@ const stockAvailabilityFinderInstance = new StockAvailabilityFinder();
 
 stockAvailabilityFinderInstance.findAndNotifyStockAvailability()
     .then((result) => {
+        if (result.emailBody === '') {
+            return;
+        }
+
         // Write result to a file for GitHub Actions to read
         writeFileSync('results.txt', JSON.stringify(result));
-        process.exit(0);
+        process.exitCode = 0;
     })
     .catch((error) => {
         console.error(error);
-        process.exit(1);
+        process.exitCode = 1;
     });
