@@ -21,11 +21,11 @@ class StockAvailabilityFinder {
 
     async updateHashSecret(hash) {
         try {
-            await this.octokit.actions.updateRepoSecret({
+            await this.octokit.actions.createRepoVariable({
               owner: this.owner,
               repo: this.repo,
-              secret_name: 'UPDATE_HASH',
-              encrypted_value: Buffer.from(hash).toString('base64')
+              name: 'UPDATE_HASH',
+              value: hash,
             });
             console.log('Successfully updated hash');
           } catch (error) {

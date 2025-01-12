@@ -30,7 +30,7 @@ jobs:
       env:
         STOCK_AVAILABILITY_URLS: ${{ secrets.STOCK_AVAILABILITY_URLS }}
         PREFERRED_STORE_IDS: ${{ secrets.PREFERRED_STORE_IDS }}
-        UPDATE_HASH: ${{ secrets.UPDATE_HASH }}
+        UPDATE_HASH: ${{ vars.UPDATE_HASH }}
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         node index.js
