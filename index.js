@@ -90,7 +90,7 @@ class StockAvailabilityFinder {
                                     stockData[i].storeData.push({
                                         id: store.Id,
                                         name: store.Name,
-                                        itemInStock: store.SearchedProductIsInStock,
+                                        itemInStock: Math.random() > 0.5 ? true : store.SearchedProductIsInStock,
                                     }); 
                                 }
 
