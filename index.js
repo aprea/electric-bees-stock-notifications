@@ -60,7 +60,6 @@ class StockAvailabilityFinder {
             }));
 
             let i = 0;
-            let someHaveStock = false;
             
             for (const url of STOCK_AVAILABILITY_URLS) {
                 try {
@@ -92,10 +91,6 @@ class StockAvailabilityFinder {
                                         name: store.Name,
                                         itemInStock: store.SearchedProductIsInStock,
                                     });
-                                
-                                    if (store.SearchedProductIsInStock === true) {
-                                        someHaveStock = true;
-                                    }
                                 }
                             }
                         } catch (parseError) {
@@ -106,12 +101,6 @@ class StockAvailabilityFinder {
                     console.error(`Error fetching ${url}:`, error.message);
                 }
                 ++i;
-            }
-
-            if (!someHaveStock) {
-                process.exitCode = 78;
-                console.log('No stock found');
-                return { emailBody: '' };
             }
             
             const hash = createHash('sha256').update(JSON.stringify(stockData)).digest('hex');
