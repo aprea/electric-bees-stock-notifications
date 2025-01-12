@@ -13,11 +13,11 @@ const GH_TOKEN = process.env.GH_TOKEN || '';
 const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY || '';
 
 class StockAvailabilityFinder {
-    constructor() {
-        this.octokit = new Octokit({ auth: GH_TOKEN });
-        this.owner = GITHUB_REPOSITORY.split('/')[0];
-        this.repo = GITHUB_REPOSITORY.split('/')[1];
-    }
+    // constructor() {
+    //     this.octokit = new Octokit({ auth: GH_TOKEN });
+    //     this.owner = GITHUB_REPOSITORY.split('/')[0];
+    //     this.repo = GITHUB_REPOSITORY.split('/')[1];
+    // }
 
     async updateHashSecret(hash) {
         try {
@@ -91,11 +91,11 @@ class StockAvailabilityFinder {
                                         id: store.Id,
                                         name: store.Name,
                                         itemInStock: store.SearchedProductIsInStock,
-                                    }); 
-                                }
-
-                                if (store.SearchedProductIsInStock) {
-                                    someHaveStock = true;
+                                    });
+                                
+                                    if (store.SearchedProductIsInStock === true) {
+                                        someHaveStock = true;
+                                    }
                                 }
                             }
                         } catch (parseError) {
@@ -136,7 +136,7 @@ class StockAvailabilityFinder {
                 ++j;
             }
 
-            await this.updateHashSecret(hash);
+            // await this.updateHashSecret(hash);
 
             return { emailBody };
         } finally {
