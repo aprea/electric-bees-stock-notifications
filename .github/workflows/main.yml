@@ -60,7 +60,7 @@ jobs:
         html_body: |
           New stock availability detected:
 
-          ${{ fromJson(steps.read-results.outputs.result.emailBody) }}
+          ${{ fromJson(steps.read-results.outputs.result).emailBody }}
         
         # Optional priority
         priority: high
