@@ -57,7 +57,7 @@ jobs:
         subject: New Electric Bees Stock Available
         to: ${{secrets.NOTIFICATION_EMAIL}}
         from: GitHub Actions <${{secrets.MAIL_USERNAME}}>
-        body: |
+        html_body: |
           New stock availability detected:
 
           ${{ steps.read-results.outputs.result }}
