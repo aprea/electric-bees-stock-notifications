@@ -134,7 +134,7 @@ class StockAvailabilityFinder {
 
             await this.updateHashSecret(hash);
 
-            return emailBody;
+            return { emailBody };
         } finally {
             if (browser) {
                 await browser.close();
@@ -148,7 +148,7 @@ const stockAvailabilityFinderInstance = new StockAvailabilityFinder();
 stockAvailabilityFinderInstance.findAndNotifyStockAvailability()
     .then((result) => {
         // Write result to a file for GitHub Actions to read
-        writeFileSync('results.txt', result);
+        writeFileSync('results.txt', JSON.stringify(result));
         process.exit(0);
     })
     .catch((error) => {
