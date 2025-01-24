@@ -102,6 +102,29 @@ class StockAvailabilityFinder {
                 }
                 ++i;
             }
+
+            let someUnkownStock = false;
+            let someInStock = false;
+
+            outer: for (const stock of stockData) {
+                if(stock.productTitle === 'Unknown') {
+                    someUnkownStock = true;
+                    continue;
+                }
+
+                for (const store of stock.storeData) {
+                    if (store.itemInStock) {
+                        someInStock = true;
+                        continue outer;
+                    }
+                }
+            }
+
+            if (someUnkownStock && !someInStock) {
+                process.exitCode = 78;
+                console.log('Some stock is unknown and none are in stock');
+                return { emailBody: '' };
+            }
             
             const hash = createHash('sha256').update(JSON.stringify(stockData)).digest('hex');
 
